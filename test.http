@@ -3,7 +3,7 @@
 POST https://32oayv3d54.execute-api.us-east-1.amazonaws.com/dev/v1/creaAppuntamento
 
 {
-    "timestampAppuntamento": 140006,
+    "timestampAppuntamento": 140007,
     "paziente": "CLLNRC",
     "anno": 2021,
     "mese": 2,
@@ -12,6 +12,20 @@ POST https://32oayv3d54.execute-api.us-east-1.amazonaws.com/dev/v1/creaAppuntame
     "minuti": 30
 }
 
+####
+
+#updateAppuntamento
+PUT  https://32oayv3d54.execute-api.us-east-1.amazonaws.com/dev/v1/updateAppuntamento/140007
+
+{
+    "timestampAppuntamento": 140006,
+    "paziente": "CLLNRC1",
+    "anno": 2021,
+    "mese": 2,
+    "giorno":8,
+    "ora": 9,
+    "minuti": 30
+}
 ####
 
 #getAllAppuntamenti
@@ -26,6 +40,13 @@ GET  https://32oayv3d54.execute-api.us-east-1.amazonaws.com/dev/v1/getAppuntamen
 
 #getappuntamentioftheday
 GET   https://32oayv3d54.execute-api.us-east-1.amazonaws.com/dev/v1/getAppuntamentiOfTheDay/2021/2/4
+
+
+
+###
+
+#getAppuntamentiOfTheMonth
+
 ###
 
 #getappuntamentidelpaziente

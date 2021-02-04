@@ -119,6 +119,45 @@ module.exports = {
             }))
         }
     },
+    getAppuntamentiOfTheMonth: async (event, context) => {
+        console.log(event.pathParameters.anno)
+        console.log(event.pathParameters.mese)
+        let getParams = {
+            TableName : "newCalendarTable",
+            FilterExpression: "anno = :anno and mese = :mese",
+            ExpressionAttributeValues: {
+                ":anno": parseInt(event.pathParameters.anno),
+                ":mese": parseInt(event.pathParameters.mese)
+            }
+        };
+        let queryResults = {}
+        try {
+            let dynamodb = new AWS.DynamoDB.DocumentClient()
+            queryResults = await dynamodb.scan(getParams).promise()
+        } catch (getError) {
+            console.log("c'è stato un errore nel prendere l'appuntamento per questa data")
+            console.log(getError)
+            return {
+                statusCode: 500
+            }
+        }
+
+
+        return {
+            statusCode: 200,
+            body: JSON.stringify(queryResults.Items.map(res => {
+                return {
+                    timestampAppuntamento: res.timestampAppuntamento,
+                    paziente: res.paziente,
+                    anno: res.anno,
+                    mese: res.mese,
+                    giorno: res.giorno,
+                    ora: res.ora,
+                    minuti: res.minuti,
+                }
+            }))
+        }
+    },
     getappuntamentiDelPaziente: async (event, context) => {
         console.log(event.pathParameters.paziente)
         let getParams = {

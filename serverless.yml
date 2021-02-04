@@ -32,6 +32,12 @@ functions:
       - http:
           path: /v1/creaAppuntamento
           method: post
+  update:
+    handler: ./src/update/handler.update
+    events:
+      - http:
+          path: /v1/updateAppuntamento/{timestampAppuntamento}
+          method: put
   list:
     handler: ./src/read/handler.list
     events:
@@ -49,6 +55,12 @@ functions:
     events:
       - http:
           path: /v1/getAppuntamentiOfTheDay/{anno}/{mese}/{giorno}
+          method: get
+  getAppuntamentiOfTheMonth:
+    handler: ./src/read/handler.getAppuntamentiOfTheMonth
+    events:
+      - http:
+          path: /v1/getAppuntamentiOfTheDay/{anno}/{mese}
           method: get
   getappuntamentiDelPaziente:
     handler: ./src/read/handler.getappuntamentiDelPaziente
