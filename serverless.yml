@@ -17,7 +17,26 @@ provider:
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
       Resource: arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/newCalendarTable
-
+  apiKeys:
+    - free:
+        - myFreeApiKey
+    - paid:
+        - myPaidApiKey
+  usagePlan:
+    - free:
+        quota:
+          limit: 1000
+          period: MONTH
+        throttle:
+          rateLimit: 5
+          burstLimit: 20 
+    - paid:
+        quota:
+          limit: 10000
+          period: MONTH
+        trottle:
+          rateLimit: 10
+          burstLimit: 30 
 
 environment:
   DYNAMODB_UTENTI_TABLE: newCalendarTable
@@ -32,48 +51,64 @@ functions:
       - http:
           path: /v1/creaAppuntamento
           method: post
+          cors: true
+          private: true 
   update:
     handler: ./src/update/handler.update
     events:
       - http:
           path: /v1/updateAppuntamento/{timestampAppuntamento}
           method: put
+          cors: true
+          private: true
   list:
     handler: ./src/read/handler.list
     events:
       - http:
           path: /v1/getAppuntamenti
           method: get
+          cors: true
+          private: true
   get:
     handler: ./src/read/handler.get
     events:
       - http:
           path: /v1/getAppuntamento/{timestampAppuntamento}
           method: get
+          cors: true
+          private: true
   getAppuntamentiOfTheDay:
     handler: ./src/read/handler.getAppuntamentiOfTheDay
     events:
       - http:
           path: /v1/getAppuntamentiOfTheDay/{anno}/{mese}/{giorno}
           method: get
+          cors: true
+          private: true
   getAppuntamentiOfTheMonth:
     handler: ./src/read/handler.getAppuntamentiOfTheMonth
     events:
       - http:
           path: /v1/getAppuntamentiOfTheDay/{anno}/{mese}
           method: get
+          cors: true
+          private: true
   getappuntamentiDelPaziente:
     handler: ./src/read/handler.getappuntamentiDelPaziente
     events:
       - http:
           path: /v1/getappuntamentiDelPaziente/{paziente}
           method: get  
+          cors: true
+          private: true
   delete:
     handler: ./src/delete/handler.delete
     events:
       - http:
           path: /v1/deleteAppuntamento/{timestampAppuntamento}
           method: delete
+          cors: true
+          private: true
 
 resources:
   Resources:
