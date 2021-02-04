@@ -1,0 +1,78 @@
+service: newCalendar
+
+frameworkVersion: '2'
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  lambdaHashingVersion: 20201221
+# you can add statements to the Lambda function's IAM Role here
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - dynamodb:PutItem
+        - dynamodb:Scan
+        - dynamodb:Query
+        - dynamodb:GetItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/newCalendarTable
+
+
+environment:
+  DYNAMODB_UTENTI_TABLE: newCalendarTable
+
+plugins:
+  - serverless-pseudo-parameters
+
+functions:
+  create:
+    handler: ./src/create/handler.create
+    events:
+      - http:
+          path: /v1/creaAppuntamento
+          method: post
+  list:
+    handler: ./src/read/handler.list
+    events:
+      - http:
+          path: /v1/getAppuntamenti
+          method: get
+  get:
+    handler: ./src/read/handler.get
+    events:
+      - http:
+          path: /v1/getAppuntamento/{timestampAppuntamento}
+          method: get
+  getAppuntamentiOfTheDay:
+    handler: ./src/read/handler.getAppuntamentiOfTheDay
+    events:
+      - http:
+          path: /v1/getAppuntamentiOfTheDay/{anno}/{mese}/{giorno}
+          method: get
+  getappuntamentiDelPaziente:
+    handler: ./src/read/handler.getappuntamentiDelPaziente
+    events:
+      - http:
+          path: /v1/getappuntamentiDelPaziente/{paziente}
+          method: get  
+  delete:
+    handler: ./src/delete/handler.delete
+    events:
+      - http:
+          path: /v1/deleteAppuntamento/{timestampAppuntamento}
+          method: delete
+
+resources:
+  Resources:
+    newCalendarTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties: 
+        TableName: newCalendarTable
+        AttributeDefinitions: 
+          - AttributeName: timestampAppuntamento
+            AttributeType: N
+        KeySchema:
+          - AttributeName: timestampAppuntamento 
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
