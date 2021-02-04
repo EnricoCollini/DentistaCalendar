@@ -10,7 +10,7 @@ Use Case CRUD Appuntamenti.
  
  
 ### creaappuntamento
-POST https://32oayv3d54.execute-api.us-east-1.amazonaws.com/dev/v1/creaAppuntamento
+POST https://------...us-east-1.amazonaws.com/dev/v1/creaAppuntamento
 
 {
     "timestampAppuntamento": 140007,
